@@ -45,16 +45,20 @@ const printBlanks = () => {
   console.log(line);
 };
 
+const printCurrentPhase = (userAnswers: string[][]) => {
+  userAnswers.forEach((answer) => {
+    printUserAnswer(answer);
+  });
+  times(6 - userAnswers.length, () => {
+    printBlanks();
+  });
+};
+
 const main = async () => {
   let collectCount = 0;
-  const userAnswers = [];
+  const userAnswers: string[][] = [];
   for (;;) {
-    userAnswers.forEach((answer) => {
-      printUserAnswer(answer);
-    });
-    times(6 - userAnswers.length, () => {
-      printBlanks();
-    });
+    printCurrentPhase(userAnswers);
 
     const userAnswer = await prompt(
       `Guess a five-letter word! (${userAnswers.length + 1}/6)`
@@ -90,6 +94,7 @@ const main = async () => {
     userAnswers.push(coloredAnswer);
 
     if (collectCount === 5) {
+      printCurrentPhase(userAnswers);
       console.log("Congratulations!!");
       break;
     }
@@ -128,6 +133,4 @@ const question = (question) => {
 // 起動
 (async () => {
   await main();
-
-  console.log("end");
 })();
